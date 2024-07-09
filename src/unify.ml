@@ -382,6 +382,11 @@ let rec prune_same_var l1 l2 j bl = match l1,l2 with
  * a substitution cannot be found due to non-LLambda issues, an error exception
  * is thrown. *)
 let make_non_llambda_subst v1 a1 t2 =
+  let ft f t = format_term f t in
+  Format.printf "@[make_non_llambda_subst v1=%s a1=[%a] t2=%a@]@."
+    v1.name
+    (Format.pp_print_list ~pp_sep:Format.pp_print_space ft) a1
+    ft t2;
   let a1 = List.map hnorm a1 in
   let n = List.length a1 in
   let rec aux lev t =
@@ -476,6 +481,8 @@ let reverse_bind (tyctx:(Term.id*Term.ty) list) t1 t2 =
     * toplevel in t2 without sacrificing unifiability but not in a nested
     * part. *)
 let makesubst tyctx h1 t2 a1 n =
+  let ft f t = format_term f t in
+  Format.printf "@[make_subst h1=%a t2=%a a1=[%a] n=%d@]@." ft h1 ft t2 (Format.pp_print_list ~pp_sep:Format.pp_print_space ft) a1 n;
   (* Check that h1 is a variable, get its timestamp *)
   let hv1 = match observe h1 with
     | Var v -> assert (variable v.tag) ; v
